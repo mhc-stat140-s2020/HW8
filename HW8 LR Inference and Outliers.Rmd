@@ -1,0 +1,203 @@
+---
+title: 'STAT 140: Homework 8'
+author: "YOUR NAME HERE"
+date: "4/10/2020"
+output:
+  word_document: default
+  html_document: default
+subtitle: Detecting Outliers and Inference for Linear Regression
+---
+
+## BOOK EXERCISES (OpenIntro Statistics, Fourth Edition)
+
+#### 8.29) **Urban homeowners, Part I.** The scatterplot on page 330 shows the percent of families who own their home vs. the percent of the population living in urban areas. There are 52 observations, each corresponding to a state in the US. Puerto Rico and District of Columbia are also included.
+
+#### a) Describe the relationship between the percent of families who own their home and the percent of the population living in urban areas.
+
+**Answer:**
+
+#### 8.32) **Beer and blood alcohol content.** Many people believe that gender, weight, drinking habits, and many other factors are much more important in predicting blood alcohol content (BAC) than simply considering the number of drinks a person consumed. Here we examine data from sixteen student volunteers at The Ohio State University who each drank a randomly assigned number of cans of beer. These students were evenly divided between men and women, and they differed in weight and drinking habits. Thirty minutes later, a police officer measured their BAC in grams of alcohol per deciliter of blood. The scatterplot and regression table summarize the findings.
+
+```{r bac832, echo=FALSE, fig.align='center', out.width="50%"}
+## If you do not have these packages installed, uncomment the relevent lines:
+# install.packages("ggplot2")
+# install.packages("knitr")
+
+library(ggplot2)
+library(knitr)
+
+bac <- read.csv("https://www.openintro.org/stat/data/csv/bac.csv")
+
+p <- (ggplot(data=bac, aes(x=beers, y=bac))
+      + geom_point()
+      + theme_bw()
+      + ylab("BAC (grams/deciliter)")
+      + xlab("Cans of beer"))
+p
+
+bac_lm <- lm(bac~beers, data=bac)
+kable(round(summary(bac_lm)$coefficients,4))
+```
+
+#### a) Describe the relationship between the number of cans of beer and BAC.
+
+**Answer:**
+
+#### b) Write the equation of the regression line. Interpret the slope and intercept in context.
+
+**Answer:**
+
+#### c) Do the data provide strong evidence that drinking more cans of beer is associated with an increase in blood alcohol? State the null and alternative hypotheses, report the p-value and state your conclusion.
+
+**Answer:**
+
+#### d) The correlation coefficient for number of cans of beer and BAC is 0.89. Calculate $R^2$ and interpret it in context.
+
+**Answer:**
+
+#### e) Suppose we visit a bar, ask people how many drinks they have had, and also take their BAC. Do you think the relationship between number of drinks and BAC would be as strong as the relationship found in the Ohio State study? BRIEFLY explain why or why not?
+
+**Answer:**
+
+#### 8.34) **Urban homeowners, Part II.** Exercise 8.29 gives a scatterplot displaying the relationship between the percent of families that own their own home and the percent of the population living in urban areas. There is a similar scatterplot on page 336, excluding District of Columbia, as well as the residuals plot. There were 51 cases. 
+
+#### a) For these data, $R^2=0.28$. What is the correlation? How can you tell if it is positive or negative?
+
+**Answer:**
+
+#### b) Examine the residual plot. What do you observe? Is a simple least squares fit appropriate for these data?
+
+**Answer:**
+
+#### 8.36) **Babies.** Is the gestational age (time between conception and birth) of a low birth-weight baby useful in predicting head circumference at birth? Twenty-five low birth-weight babies were studied at a Harvard teaching hospital; the investigators calculated the regression of head circumference (measured in centimeters) against gestational age (measured in weeks). The estimated regression line is
+
+$$\widehat{head \ circumference}=3.91+0.78\times gestational \ age$$
+
+#### a) What is the predicted head circumference for a baby whose gestational age is 28 weeks?
+
+**Answer:**
+
+#### b) The standard error for the coefficient of gestational age is 0.35, which is associated with $df=23$. Does the model provide strong evidence that gestational age is significantly associated with head circumference?
+
+**Answer:**
+
+#### 8.42) **Helmets and lunches.** The scatterplot on page 339 shows the relationship between socioeconomic status measured as the percentage of children in a neighborhood receiving reduced-fee lunches at school (\texttt{lunch}) and the percentage of bike riders in the neighborhood wearing helmets (\texttt{helmet}). The average percentage of children receiving reduced-fee lunches is 30.8% with a standard deviation of 26.7% and the average percentage of bike riders wearing helmets is 38.8% with a standard deviation of 16.9%.
+
+#### a) If the $R^2$ for the least-squares regression line for these data is 72%, what is the correlation between \texttt{lunch} and \texttt{helmet}?
+
+**Answer:**
+
+#### b) Calculate the slope and intercept for the least-squares regression line for these data.
+
+**Answer:**
+
+#### c) Interpret the intercept of the least-squares regression line in the context of the application.
+
+**Answer:**
+
+#### d) Interpret the slope of the least-squares regression line in the context of the application.
+
+**Answer:**
+
+#### e) What would the value of the residual be for a neighborhood where 40% of the children receive reduced-fee lunches and 40% of the bike riders wear helmets? Interpret the meaning of this residual in the context of the application.
+
+**Answer:**
+
+## R EXERCISE
+
+**Simple Linear Regression with a Categorical Predictor.**
+
+#### Run the following R chunk
+
+```{r}
+babies <- read.csv("https://www.openintro.org/stat/data/csv/babies.csv")
+
+## Include only gestation and smoke varibles; omit all NA values
+babies2 <- na.omit(babies[,names(babies) %in% c("gestation", "smoke")])
+```
+
+#### Mother's smoking status during pregnancy can have an important influence on gestational age (measure of the age of a pregnancy). Use ggplot to make a side-by-side boxplot of gestational age, separated by smoking status (0=no-smoker, 1=smoker). 
+
+```{r}
+
+```
+
+#### In your boxplot, change the x-axis label to "Maternal Smoking Status". Change the y-axis label to "Gestational Age (days)". Hint: you will need to add two lines to your ggplot code, xlab("Maternal Smoking Status"), and ylab("Gestational Age (days)").
+
+```{r}
+
+```
+
+#### Using the lm() function, fit a linear model that predicts gestational age from smoking status. Name your model gess_model and use as.factor(smoke) to ensure that smoke is treated as a categorical predictor, rather than numeric. 
+
+```{r}
+
+```
+
+
+#### Use the summary() function to summarize the gess_model fit. 
+
+```{r}
+
+```
+
+
+#### Interpret the intercept in the context of the problem. Is it appropriate to interpret the intercept in this problem (think carefully about this!)? Hint: smoking status is an indicator variable, meaning it is 0 for a nonsmoker, and 1 otherwise.
+
+**Answer:**
+
+#### Interpret the ``slope" (the coefficient for smoking status) in the context of the problem. Think carefully about this interpretation, since this is a categorical predictor. 
+
+**Answer:**
+
+
+
+#### Conduct a hypothesis test to determine whether maternal smoking status is a significant predictor of gestational age. Be sure to state your hypotheses and draw conclusions in the context of the problem. 
+
+**Answer:**
+
+
+#### What percent of the variability in gestational age is accounted for by maternal smoking status? Hint: this $R^2$ (Multiple R-squared in the summary output).
+
+**Answer:**
+
+
+
+It turns out that while maternal smoking status is important to consider, maternal age is also important. If you are interested in learning a little more about this, you can read this abstract: https://www.ncbi.nlm.nih.gov/pubmed/2301517. This R exercise focuses only on simple linear regression (one predictor), but the babies data set has more variables we could consider. You could consider adding another predictor, age, to the model.
+
+You do not need to modify this code at all, BUT YOU SHOULD RUN IT. This is just for reference. It will come in handy for your project!!
+
+```{r}
+## Include only gestation and smoke varibles; omit all NA values
+babies3 <- na.omit(babies[,names(babies) %in% c("gestation", "smoke", "age")])
+
+## Scatterplot to visualize this relationship:
+ggplot(data=babies3, aes(x=age, y=gestation, color=as.factor(smoke))) +
+  geom_point() + 
+  geom_smooth(method="lm", se = FALSE) + 
+  theme_bw()
+## There may be two different lines for the groups. Note, you will see more of this if you continue on to STAT 242 at some point.
+## There are also potential outliers around age = 27, 28, 35; STAT 242 teaches formal methods for identifying potential outliers
+
+## Multiple regression model with gestation as response, smoke and age as predictors:
+lm_fit2 <- lm(gestation ~ smoke + age, data=babies3)
+summary(lm_fit2)
+
+## Residual plot:
+residuals.df <- data.frame(age=babies3$age,
+                           smoke=as.factor(babies3$smoke),
+                           residual=residuals(lm_fit2))
+
+ggplot(data=residuals.df, aes(x=age, y=residual)) +
+  geom_point() +
+  geom_hline(yintercept=0, color="red") +
+  theme_bw()
+## Apart from the outliers, this looks good. Recall we are checking to see if there are any obvious patterns in the residual plot (left over after we accounted for the predictor variables). Here linearity, normality, and equal variance seem OK because there are no obvious patterns. We would also want to check if the observations arose from a random sample to see if independence is appropriate.
+
+## Residual density plot (for categorical predictors):
+ggplot(data=residuals.df, aes(x=residual, color=smoke)) +
+  geom_density() +
+  theme_bw()
+## Here we are looking for these to be unimodal and really similar - this looks good; equal variance, and normality for the residuals are satisfied as a function of smoking status.
+```
+
